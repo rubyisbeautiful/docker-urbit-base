@@ -1,6 +1,6 @@
 # docker-urbit-base
 
-Base image for Urbit via Docker
+Base image for [Urbit](https://urbit.org) via Docker
 
 ## usage
 
