@@ -1,8 +1,5 @@
 FROM ubuntu:latest
 
-ARG URBIT_VERSION=0.4.3
-ENV URBIT_VERSION=${URBIT_VERSION}
-
 LABEL maintainer="<rubyisbeautiful> bcptaylor@gmail.com"
 
 RUN apt-get update -y && apt-get install -y \
