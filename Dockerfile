@@ -9,31 +9,41 @@ RUN apt-get update -y && apt-get install -y \
     autoconf \
     automake \
     cmake \
-    curl \
     exuberant-ctags \
     g++ \
-    libgmp3-dev \
+    git \
     libcurl4-gnutls-dev \
+    libgmp3-dev \
     libncurses5-dev \
     libsigsegv-dev \
     libssl-dev \
     libtool \
     make \
     openssl \
+    pkg-config \
+    python \
+    python3 \
+    python3-pip \
     ragel \
     re2c \
- && rm -rf /var/lib/apt/lists/*
+    zlib1g-dev \
+ && rm -rf /var/lib/apt/lists/* \
+ && pip3 install --upgrade pip \
+ && pip install meson==0.29 \
+ && git clone git://github.com/ninja-build/ninja.git /tmp/ninja \
+ && cd /tmp/ninja \
+ &&   git checkout release \
+ &&   ./configure.py --bootstrap \
+ &&   cp ./ninja /usr/local/bin \
+ && cd / \
+ && rm -rf /tmp/ninja
 
-RUN mkdir -p /urbit
+RUN git clone git://github.com/urbit/urbit /urbit \
+ && cd urbit \
+ &&   ./scripts/bootstrap \
+ &&   ./scripts/build \
+ &&   ninja -C ./build/ install
 
 WORKDIR /urbit
 
-RUN curl -o urbit-$URBIT_VERSION.tar.gz https://media.urbit.org/dist/src/urbit-$URBIT_VERSION.tar.gz \
- && tar xzf urbit-$URBIT_VERSION.tar.gz \
- && rm -f urbit-$URBIT_VERSION.tar.gz
-
-WORKDIR /urbit/urbit-$URBIT_VERSION
-
-RUN make
-
-RUN curl -o urbit.pill https://bootstrap.urbit.org/latest.pill
+CMD urbit -R
